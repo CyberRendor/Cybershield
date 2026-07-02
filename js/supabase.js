@@ -1,36 +1,28 @@
-/**
- * CyberShield - supabase.js
- * Supabase Cloud Client Configuration & Initialization.
- * Replace placeholders with your own Supabase project details.
- */
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
-// Replace these values with your Supabase Project URL and Anon Key
-const SUPABASE_URL = "https://bszttorbplxuwpejlsjt.supabase.co/rest/v1/";
+// 1. A javított URL (a /rest/v1/ NÉLKÜL!)
+const SUPABASE_URL = "https://bszttorbplxuwpejlsjt.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzenR0b3JicGx4dXdwZWpsc2p0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5NTgyNTUsImV4cCI6MjA5ODUzNDI1NX0.i6SQihHpXKZcW_CuZ9hz__SnBkSeZwwe0Hr_FCdQBvk";
 
 let supabaseClient = null;
 
 try {
-    if (typeof supabase !== "undefined" && SUPABASE_URL !== "YOUR_SUPABASE_URL_HERE" && SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY_HERE") {
-        supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        console.log("Supabase kliens sikeresen inicializálva.");
-    } else {
-        console.warn("Supabase nincs konfigurálva vagy a CDN nem töltődött be. Offline mód aktív.");
-    }
+    // 2. Kliens létrehozása közvetlenül
+    supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log("Supabase kliens sikeresen inicializálva!");
 } catch (error) {
     console.error("Hiba a Supabase kliens inicializálása során:", error);
 }
 
-// Global Supabase helper export
+// 3. Globális változók a többi script számára
+window.supabase = supabaseClient;
+
 window.SupabaseConnection = {
     client: supabaseClient,
     isConfigured: function() {
-        return (
-            supabaseClient !== null &&
-            SUPABASE_URL !== "" &&
-            SUPABASE_URL !== "https://bszttorbplxuwpejlsjt.supabase.co/rest/v1/" &&
-            SUPABASE_ANON_KEY !== "" &&
-            SUPABASE_ANON_KEY !== "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJzenR0b3JicGx4dXdwZWpsc2p0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI5NTgyNTUsImV4cCI6MjA5ODUzNDI1NX0.i6SQihHpXKZcW_CuZ9hz__SnBkSeZwwe0Hr_FCdQBvk"
-        );
+        // Fixáltuk: mivel tudjuk, hogy az adatok jók, ez most már mindig igazat ad vissza.
+        return supabaseClient !== null;
     }
 };
+
+export { supabaseClient as supabase };
